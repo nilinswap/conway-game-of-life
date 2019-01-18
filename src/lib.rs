@@ -2,7 +2,8 @@ extern crate cfg_if;
 extern crate wasm_bindgen;
 
 mod utils;
-
+mod universe;
+mod cell;
 use cfg_if::cfg_if;
 use wasm_bindgen::prelude::*;
 
@@ -24,4 +25,13 @@ extern {
 #[wasm_bindgen]
 pub fn greet(name: &str) {
     alert(&format!("Hello, welcome to wasm-game-of-life, {}", name));
+}
+
+
+#[wasm_bindgen]
+pub fn univ() -> String {
+    let univer = universe::Universe::new();
+    //println!("{}", univer);
+    univer.render()
+
 }
