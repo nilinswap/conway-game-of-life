@@ -6,7 +6,22 @@ pub struct Universe{
 	width: u32,
 	height: u32,
 	cells: Vec<cell::Cell>,
+	total_living: u32,
 }
+
+
+#[wasm_bindgen]
+extern {
+    fn alert(s: &str);
+}
+
+#[wasm_bindgen]
+pub fn greet(name: &str) {
+    alert(&format!("Hello, welcome to wasm-game-of-life, {}", name));
+}
+
+
+
 impl Universe{
 	fn get_index(&self, row: u32, column: u32) -> usize{
 		(row*self.width + column) as usize
@@ -32,27 +47,58 @@ impl Universe{
 impl Universe{
 	pub fn new() -> Self{
 
-		let width :u32 = 16;
-		let height:u32 = 16;
+		let width :u32 = 64;
+		let height:u32 = 64;
 		let mut cells :Vec<cell::Cell> = vec![];
+		let mut total_living = 0;
 		for i in 0..width*height{
-			if i%2 == 0 || i%7==0{
+			if i%7 == 0 || i%3 ==0{
 				cells.push(cell::Cell::Alive);
+				total_living += 1;
 			}
 			else{
 				cells.push(cell::Cell::Dead);
 			}
+
 		}
 		//let cells: Vec<cell::Cell> = vec![cell::Cell::dead;(width*height) as usize];
 		Universe{
-			width ,
+			width,
 			height,
 			cells,
+			total_living,
+
 
 		}
 	}
 	pub fn tick(&mut self){
-		unimplemented!();
+		let mut cells= self.cells.clone();
+		for row in 0..self.height{
+			for col in 0..self.width{
+				let idx = self.get_index( row, col );
+				let nei_count = self.live_neighbour_count(row, col);
+
+				let next_cell = match (nei_count, self.cells[idx]){
+												(x, cell::Cell::Alive)if x < 2 || x > 3  =>{ self
+													.total_living -=1;
+													cell::Cell::Dead},
+												(x, cell::Cell::Alive)if x == 2 || x == 3 =>
+													{
+													cell::Cell::Alive},
+												(3, cell::Cell::Dead) => { self
+													.total_living +=1;
+													cell::Cell::Alive},
+												(_, _)	=> {
+													cell::Cell::Dead},
+
+
+											};
+				cells[idx] = next_cell;
+			}
+		}
+		self.cells = cells;
+		//alert(&self.total_living.to_string());
+
 	}
 	pub fn render(&self) -> String{
 		self.to_string()
@@ -75,8 +121,11 @@ impl fmt::Display for Universe{
 			st += "\n";
 
 		}
-		write!(f, "{}", &st)
+		write!(f, "{}", &st)?;
+
+		Ok(())
 	}
+
 
 
 }

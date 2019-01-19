@@ -17,21 +17,11 @@ cfg_if! {
     }
 }
 
-#[wasm_bindgen]
-extern {
-    fn alert(s: &str);
-}
 
 #[wasm_bindgen]
-pub fn greet(name: &str) {
-    alert(&format!("Hello, welcome to wasm-game-of-life, {}", name));
-}
-
-
-#[wasm_bindgen]
-pub fn univ() -> String {
+pub fn get_universe() -> universe::Universe {
     let univer = universe::Universe::new();
     //println!("{}", univer);
-    univer.render()
+    univer
 
 }
