@@ -1,6 +1,6 @@
-# 🦀🕸️ `wasm-pack-template`
+# 🦀🕸️ `convay-game-of-life`
 
-A template for kick starting a Rust and WebAssembly project using
+It uses a template for kick starting a Rust and WebAssembly project using
 [`wasm-pack`](https://github.com/rustwasm/wasm-pack).
 
 This template is designed for compiling Rust libraries into WebAssembly and
