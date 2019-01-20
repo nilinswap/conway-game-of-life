@@ -2,7 +2,7 @@ extern crate cfg_if;
 extern crate wasm_bindgen;
 
 mod utils;
-mod universe;
+pub mod universe;
 mod cell;
 use cfg_if::cfg_if;
 use wasm_bindgen::prelude::*;
@@ -16,6 +16,7 @@ cfg_if! {
         static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
     }
 }
+
 
 
 #[wasm_bindgen]
