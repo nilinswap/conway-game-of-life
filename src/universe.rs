@@ -1,6 +1,18 @@
 use crate::cell;
 extern crate wasm_bindgen;
 use wasm_bindgen::prelude::*;
+extern crate web_sys;
+use utils;
+
+
+// A macro to provide `println!(..)`-style syntax for `console.log` logging.
+macro_rules! log {
+    ( $( $t:tt )* ) => {
+        web_sys::console::log_1(&format!( $( $t )* ).into());
+    }
+}
+
+
 #[wasm_bindgen]
 pub struct Universe{
 	width: u32,
@@ -47,6 +59,9 @@ impl Universe{
 impl Universe{
 	pub fn new() -> Self{
 
+		utils::set_panic_hook();
+
+
 		let width :u32 = 64;
 		let height:u32 = 64;
 		let mut cells :Vec<cell::Cell> = vec![];
@@ -71,13 +86,21 @@ impl Universe{
 
 		}
 	}
-	pub fn tick(&mut self){
+
+    pub fn tick(&mut self){
 		let mut cells= self.cells.clone();
 		for row in 0..self.height{
 			for col in 0..self.width{
 				let idx = self.get_index( row, col );
+				let cell = cells[idx];
 				let nei_count = self.live_neighbour_count(row, col);
-
+				 log!(
+                    "cell[{}, {}] is initially {:?} and has {} live neighbors",
+                    row,
+                    col,
+                    cell,
+                    nei_count
+				 );
 				let next_cell = match (nei_count, self.cells[idx]){
 												(x, cell::Cell::Alive)if x < 2 || x > 3  =>{ self
 													.total_living -=1;
@@ -94,9 +117,13 @@ impl Universe{
 
 											};
 				cells[idx] = next_cell;
+				let a = next_cell;
+
+				println!("    it becomes {:?}", next_cell);
 			}
 		}
 		self.cells = cells;
+		//println!("{:?}", cells[0]);
 		//alert(&self.total_living.to_string());
 
 	}
