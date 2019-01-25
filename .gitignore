@@ -4,3 +4,6 @@ Cargo.lock
 bin/
 pkg/
 wasm-pack.log
+.gitignore.swp
+.idea/encodings.xml
+.idea/workspace.xml
