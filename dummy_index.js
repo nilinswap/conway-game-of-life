@@ -65,6 +65,10 @@ canvas.width = (CELL_SIZE + 1) * width + 1;
 
 
 
+
+
+
+
  const renderLoop = () => {
   //debugger;
   universe.tick();
