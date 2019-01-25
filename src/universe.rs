@@ -117,9 +117,9 @@ impl Universe{
 
 											};
 				cells[idx] = next_cell;
-				let a = next_cell;
+				//let a = next_cell;
 
-				println!("    it becomes {:?}", next_cell);
+				log!("    it becomes {:?}", next_cell);
 			}
 		}
 		self.cells = cells;
@@ -130,6 +130,18 @@ impl Universe{
 	pub fn render(&self) -> String{
 		self.to_string()
 	}
+
+	pub fn width(&self) -> u32 {
+        self.width
+    }
+
+    pub fn height(&self) -> u32 {
+        self.height
+    }
+
+    pub fn cells(&self) -> *const cell::Cell {
+        self.cells.as_ptr()
+    }
 }
 
 use std::fmt;

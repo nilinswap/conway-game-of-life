@@ -3,7 +3,7 @@ extern crate wasm_bindgen;
 
 mod utils;
 pub mod universe;
-mod cell;
+pub mod cell;
 use cfg_if::cfg_if;
 use wasm_bindgen::prelude::*;
 
