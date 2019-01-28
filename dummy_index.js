@@ -1,7 +1,13 @@
-import { Universe, Cell } from "wasm-game-of-life";
+import { Universe, Cell } from "wasm-game-of-life";  //can be imported because wasm-bindgen attr was written on its stuct declaration. and the fact that it can be imported from the project name is because project is library.
 import { memory } from "wasm-game-of-life/wasm_game_of_life_bg";
 
- const CELL_SIZE = 5; // px
+function sleep(delay) {
+        var start = new Date().getTime();
+        while (new Date().getTime() < start + delay);
+      }
+
+
+const CELL_SIZE = 5; // px
 const GRID_COLOR = "#CCCCCC";
 const DEAD_COLOR = "#FFFFFF";
 const ALIVE_COLOR = "#000000";
@@ -66,16 +72,43 @@ canvas.width = (CELL_SIZE + 1) * width + 1;
 
 
 
-
+let animationId = null;
 
 
  const renderLoop = () => {
   //debugger;
   universe.tick();
-
+    sleep(100);
    drawGrid();
   drawCells();
 
-   requestAnimationFrame(renderLoop);
+   animationId = requestAnimationFrame(renderLoop);
 };
-renderLoop(); 
+
+const isPaused = () =>{
+	return animationId === null;
+};
+
+const playPauseButton = document.getElementById("play-pause");
+
+const play = () => {
+	playPauseButton.textContent = "⏸";
+	renderLoop();
+};
+
+const pause = () =>{
+playPauseButton.textContent = "▶";
+	cancelAnimationFrame(animationId);
+
+	animationId = null;
+};
+
+playPauseButton.addEventListener("click", event => {
+	if(isPaused()){
+		play();
+	}
+	else{
+		pause();
+	}
+});
+play(); 
