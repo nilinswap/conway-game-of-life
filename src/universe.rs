@@ -87,6 +87,11 @@ impl Universe{
 		}
 	}
 
+	pub fn toggle_cell(&mut self, row: u32, column: u32) {
+        let idx = self.get_index(row, column);
+        self.cells[idx].toggle();
+    }
+
     pub fn tick(&mut self){
 		let mut cells= self.cells.clone();
 		for row in 0..self.height{
